@@ -7,6 +7,7 @@
   // seem very useful, but remember it--if a function needs to provide an
   // iterator when the user does not pass one in, this will be handy.
   _.identity = function(val) {
+    return val;
   };
 
   /**
@@ -37,6 +38,11 @@
   // Like first, but for the last elements. If n is undefined, return just the
   // last element.
   _.last = function(array, n) {
+    if (n === 0) {
+      return [];
+    } else {
+      return n === undefined ? array[array.length-1] : array.slice((0 - n)); 
+    }  
   };
 
   // Call iterator(value, key, collection) for each element of collection.
@@ -45,6 +51,39 @@
   // Note: _.each does not have a return value, but rather simply runs the
   // iterator function over each item in the input collection.
   _.each = function(collection, iterator) {
+    function eachArray(collection, iterator) {
+      for (var i = 0; i < collection.length; i++) {
+        if (Array.isArray(collection[i]) === true) {
+          eachArray(collection[i], iterator);
+        } else if ((typeof collection[i]) === 'object') {
+          eachObjectLit(collection[i], iterator);
+        } else if (iterator.length === 1) {
+          iterator(collection[i]);
+        } else  if (iterator.length === 2) {
+          iterator(collection[i], i);     
+        } else {
+          iterator(collection[i], i, collection);
+        }
+      } 
+    }
+
+    function eachObjectLit(collection, iterator) {
+      for (var property in collection) {
+        if (Array.isArray(collection[property]) === true) {
+          eachArray(collection[property], iterator);
+        } else if ((typeof collection[property]) === 'object') {
+          eachObjectLit(collection[property], iterator);
+        } else {
+          iterator(collection[property]);
+        }
+      }
+    }
+
+    if (Array.isArray(collection) === true) {
+      eachArray(collection, iterator);
+    } else {
+      eachObjectLit(collection, iterator);
+    }
   };
 
   // Returns the index at which value can be found in the array, or -1 if value
