@@ -73,8 +73,12 @@
           eachArray(collection[property], iterator);
         } else if ((typeof collection[property]) === 'object') {
           eachObjectLit(collection[property], iterator);
-        } else {
+        } else if (iterator.length === 1) {
           iterator(collection[property]);
+        } else if (iterator.length === 2) {
+          iterator(collection[property], property);
+        } else {
+          iterator(collection[property], property, collection);
         }
       }
     }
