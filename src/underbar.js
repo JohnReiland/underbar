@@ -137,6 +137,7 @@
   // Produce a duplicate-free version of the array.
   _.uniq = function(array, isSorted, iterator) {
     var unique = [];
+    var recent;
     if (arguments.length === 1) {
       for (var i = 0; i < array.length; i++) {
         if (unique.includes(array[i]) === false) {
@@ -144,9 +145,24 @@
         }
       }
       return unique;
-    } else if (arguments.length === 2) {
-      
+    } else if ((arguments.length === 2) && (arguments[1] === true)) {
+      for (var n = 0; n < array.length; n++) {
+        if (recent !== array[n]) {
+          recent = array[n];
+          unique.push(array[n]);
+        }
+      } 
+    } else if ((arguments.length === 3) && (arguments[1] === true)) {
+      var intermediate = [];
+      for (var d = 0; d < array.length; d++) {
+        if (intermediate.includes(iterator(array[d])) === false) {
+          intermediate.push(iterator(array[d]));
+          unique.push(array[d]);
+        }
+      } 
+
     }
+    return unique;
   };
 
 
