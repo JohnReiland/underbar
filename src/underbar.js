@@ -227,15 +227,36 @@
       usesAccumulator = true;
       total = accumulator;
     }
-    for (var i = 0; i < collection.length; i++) {
-      if (usesAccumulator === false) {
-        usesAccumulator = true;
-        total = collection[0];
-        continue;
+
+    function reduceArray(collection, iterator, accumulator) {
+      for (var i = 0; i < collection.length; i++) {
+        if (usesAccumulator === false) {
+          usesAccumulator = true;
+          total = collection[0];
+          continue;
+        }
+        total = iterator(total, collection[i]);
       }
-      total = iterator(total, collection[i]);
+      return total;
     }
-    return total;
+
+    function reduceObject(collection, iterator, accumulator) {
+      for (var prop in collection) {
+        if (usesAccumulator === false) {
+          usesAccumulator = true;
+          total = collection[prop];
+          continue;
+        }
+        total = iterator(total, collection[prop]);
+      }
+      return total;
+    }
+
+    if (Array.isArray(collection) === true) {
+      reduceArray(collection, iterator, accumulator);
+    } else {
+      reduceObject(collection, iterator, accumulator);
+    }
   };
 
   // Determine if the array or object contains a given value (using `===`).
