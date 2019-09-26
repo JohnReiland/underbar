@@ -221,6 +221,7 @@
   //   }); // should be 5, regardless of the iterator function passed in
   //          No accumulator is given so the first element is used.
   _.reduce = function(collection, iterator, accumulator) {
+    var result;
     var total;
     var usesAccumulator = false;
     if (arguments.length === 3) {
@@ -253,10 +254,11 @@
     }
 
     if (Array.isArray(collection) === true) {
-      reduceArray(collection, iterator, accumulator);
+      result = reduceArray(collection, iterator, accumulator);
     } else {
-      reduceObject(collection, iterator, accumulator);
+      result = reduceObject(collection, iterator, accumulator);
     }
+    return result;
   };
 
   // Determine if the array or object contains a given value (using `===`).
