@@ -136,6 +136,17 @@
 
   // Produce a duplicate-free version of the array.
   _.uniq = function(array, isSorted, iterator) {
+    var unique = [];
+    if (arguments.length === 1) {
+      for (var i = 0; i < array.length; i++) {
+        if (unique.includes(array[i]) === false) {
+          unique.push(array[i]);
+        }
+      }
+      return unique;
+    } else if (arguments.length === 2) {
+      
+    }
   };
 
 
